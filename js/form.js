@@ -4,11 +4,17 @@ var pins = document.querySelectorAll('.pin');
 var pinsNum = pins.length;
 var infoWindow = document.querySelector('.dialog');
 
+
 // Открытие
 for (var i = 0; i < pinsNum; i++) {
-  pins[i].addEventListener('click', function (event) {
-    clearActive();
-    event.currentTarget.classList.add('pin--active');
+  pinClickHandler(pins[i]);
+}
+
+function pinClickHandler (pin) {
+  pin.addEventListener('click', function () {
+    var activePin = document.querySelector('.pin--active');
+    clearActive(activePin);
+    pin.classList.add('pin--active');
     infoWindow.style.display = 'block';
   });
 }
@@ -19,18 +25,19 @@ var closer = document.querySelector('.dialog__close');
 closer.addEventListener('click', function (event) {
   event.preventDefault();
   infoWindow.style.display = 'none';
-  clearActive();
+  var activePin = document.querySelector('.pin--active');
+  clearActive(activePin);
 });
 
 // Деактивация активного класса
-function clearActive() {
-  var activePin = document.querySelector('.pin--active');
-  if (activePin) {
-    activePin.classList.remove('pin--active');
+function clearActive(pin) {
+  if (pin) {
+    pin.classList.remove('pin--active');
   }
 }
 
-// валидация
+
+// Валидация
 var form = document.querySelector('.notice__form');
 var formTitle = form.querySelector('#title');
 var formPrice = form.querySelector('#price');
@@ -62,12 +69,12 @@ formCheckOut.addEventListener('change', function () {
 var formType = form.querySelector('#type');
 
 formType.addEventListener('change', function () {
-  switch (formType.options[formType.selectedIndex].value) {
+  switch (formType.value) {
     case 'sm':
       formPrice.min = 0;
       break;
     case 'lg':
-      formPrice.min = 1000000;
+      formPrice.min = 10000;
       break;
     default:
       formPrice.min = 1000;
@@ -78,15 +85,20 @@ formType.addEventListener('change', function () {
 var formRooms = form.querySelector('#room_number');
 var formGuests = form.querySelector('#capacity');
 
-formGuests.selectedIndex = 1;
+syncGuests();
+
+formGuests.addEventListener('change', function () {
+  syncGuests();
+});
 
 formRooms.addEventListener('change', function () {
-  switch (formRooms.options[formRooms.selectedIndex].value) {
-    case '1':
-      formGuests.selectedIndex = 1;
-      break;
-    case '2':
-    case '100':
-      formGuests.selectedIndex = 0;
-  }
+  syncRooms();
 });
+
+function syncGuests () {
+  formGuests.selectedIndex == 0 ? formRooms.selectedIndex = 1 : formRooms.selectedIndex = 0;
+}
+
+function syncRooms () {
+  formRooms.value == 1 ? formGuests.selectedIndex = 1 : formGuests.selectedIndex = 0;
+}
