@@ -10,7 +10,7 @@ for (var i = 0; i < pinsNum; i++) {
   pinClickHandler(pins[i]);
 }
 
-function pinClickHandler (pin) {
+function pinClickHandler(pin) {
   pin.addEventListener('click', function () {
     var activePin = document.querySelector('.pin--active');
     clearActive(activePin);
@@ -95,10 +95,10 @@ formRooms.addEventListener('change', function () {
   syncRooms();
 });
 
-function syncGuests () {
-  formGuests.selectedIndex == 0 ? formRooms.selectedIndex = 1 : formRooms.selectedIndex = 0;
+function syncGuests() {
+  formRooms.selectedIndex = (formGuests.selectedIndex === 0) ? 1 : 0;
 }
 
-function syncRooms () {
-  formRooms.value == 1 ? formGuests.selectedIndex = 1 : formGuests.selectedIndex = 0;
+function syncRooms() {
+  formGuests.selectedIndex = (formRooms.value === '1') ? 1 : 0;
 }
