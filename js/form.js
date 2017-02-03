@@ -3,6 +3,7 @@
 var pins = document.querySelectorAll('.pin');
 var pinsNum = pins.length;
 var infoWindow = document.querySelector('.dialog');
+var activePin = document.querySelector('.pin--active');
 
 
 // Открытие
@@ -12,9 +13,9 @@ for (var i = 0; i < pinsNum; i++) {
 
 function pinClickHandler(pin) {
   pin.addEventListener('click', function () {
-    var activePin = document.querySelector('.pin--active');
     clearActive(activePin);
     pin.classList.add('pin--active');
+    activePin = pin;
     infoWindow.style.display = 'block';
   });
 }
@@ -25,14 +26,13 @@ var closer = document.querySelector('.dialog__close');
 closer.addEventListener('click', function (event) {
   event.preventDefault();
   infoWindow.style.display = 'none';
-  var activePin = document.querySelector('.pin--active');
-  clearActive(activePin);
+  clearActive();
 });
 
 // Деактивация активного класса
-function clearActive(pin) {
-  if (pin) {
-    pin.classList.remove('pin--active');
+function clearActive() {
+  if (activePin) {
+    activePin.classList.remove('pin--active');
   }
 }
 
