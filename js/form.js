@@ -1,6 +1,7 @@
 'use strict';
 
 // Пины и диалог
+var map = document.querySelector('.tokyo__pin-map');
 var pins = document.querySelectorAll('.pin');
 var pinsNum = pins.length;
 var infoWindow = document.querySelector('.dialog');
@@ -20,20 +21,17 @@ var formGuests = form.querySelector('#capacity');
 
 var keys = {ENTER: 13, ESCAPE: 27};
 
-// Слушать клик по пину
-var pinClickHandler = function (pin) {
-  pin.addEventListener('click', function () {
-    setActive(pin);
-  });
-};
+var detectTargetPin = function (event) {
+  var target = event.target;
 
-// Слушать нажатие клавиш на пине
-var pinKeyHandler = function (pin) {
-  pin.addEventListener('keydown', function (event) {
-    if (isEnter(event)) {
-      setActive(pin);
+  while (target !== map) {
+    if (target.className === 'pin') {
+      return target;
     }
-  });
+    target = target.parentNode;
+  }
+
+  return false;
 };
 
 //  Активировать пин
@@ -89,10 +87,27 @@ infoWindow.setAttribute('aria', 'dialog');
 closer.setAttribute('aria', 'button');
 closer.tabIndex = 1;
 
+// Map 0-height fix
+map.style = 'position: absolute; top: 0; left: 0; right: 0; bottom: 50px; z-index: 0;';
+
+// Ожидание клика на пине
+map.addEventListener('click', function (event) {
+  if (detectTargetPin(event)) {
+    var pin = detectTargetPin(event);
+    setActive(pin);
+  }
+});
+
+// Ожидание Enter на пине
+map.addEventListener('keydown', function (event) {
+  if (detectTargetPin(event) && isEnter(event)) {
+    var pin = detectTargetPin(event);
+    setActive(pin);
+  }
+});
+
 // Настройка пинов
 for (var i = 0; i < pinsNum; i++) {
-  pinClickHandler(pins[i]);
-  pinKeyHandler(pins[i]);
   pins[i].setAttribute('aria', 'button');
   pins[i].setAttribute('aria-pressed', 'false');
   pins[i].tabIndex = 1;
