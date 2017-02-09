@@ -2,8 +2,6 @@
 
 // Пины и диалог
 var map = document.querySelector('.tokyo__pin-map');
-var pins = document.querySelectorAll('.pin');
-var pinsNum = pins.length;
 var infoWindow = document.querySelector('.dialog');
 var activePin = document.querySelector('.pin--active');
 var closer = document.querySelector('.dialog__close');
@@ -25,7 +23,7 @@ var detectTargetPin = function (event) {
   var target = event.target;
 
   while (target !== map) {
-    if (target.className === 'pin') {
+    if (target.classList.contains('pin')) {
       return target;
     }
     target = target.parentNode;
@@ -80,38 +78,21 @@ var syncGuests = function () {
   formGuests.selectedIndex = (formRooms.value === '1') ? 1 : 0;
 };
 
-// Настройка диалога
-infoWindow.setAttribute('aria', 'dialog');
-
-// Настройка кнопки закрытия
-closer.setAttribute('aria', 'button');
-closer.tabIndex = 1;
-
-// Map 0-height fix
-map.style = 'position: absolute; top: 0; left: 0; right: 0; bottom: 50px; z-index: 0;';
-
 // Ожидание клика на пине
 map.addEventListener('click', function (event) {
-  if (detectTargetPin(event)) {
-    var pin = detectTargetPin(event);
+  var pin = detectTargetPin(event);
+  if (pin) {
     setActive(pin);
   }
 });
 
 // Ожидание Enter на пине
 map.addEventListener('keydown', function (event) {
-  if (detectTargetPin(event) && isEnter(event)) {
-    var pin = detectTargetPin(event);
+  var pin = detectTargetPin(event);
+  if (pin && isEnter(event)) {
     setActive(pin);
   }
 });
-
-// Настройка пинов
-for (var i = 0; i < pinsNum; i++) {
-  pins[i].setAttribute('aria', 'button');
-  pins[i].setAttribute('aria-pressed', 'false');
-  pins[i].tabIndex = 1;
-}
 
 // Ожидание клика на закрытие
 closer.addEventListener('click', function (event) {
@@ -121,6 +102,13 @@ closer.addEventListener('click', function (event) {
 // Ожидание нажатия Enter или Escape на закрытие
 closer.addEventListener('keydown', function (event) {
   if (isEnter(event) || isEscape(event)) {
+    closeInfoWindow(event);
+  }
+});
+
+// Ожидание нажатия Escape на закрытие
+infoWindow.addEventListener('keydown', function (event) {
+  if (isEscape(event)) {
     closeInfoWindow(event);
   }
 });
@@ -138,11 +126,11 @@ formAddress.required = true;
 
 // Синхронизация времени въезда - выезда
 formCheckIn.addEventListener('change', function () {
-  formCheckOut.selectedIndex = formCheckIn.selectedIndex;
+  formCheckOut.value = formCheckIn.value;
 });
 
 formCheckOut.addEventListener('change', function () {
-  formCheckIn.selectedIndex = formCheckOut.selectedIndex;
+  formCheckIn.value = formCheckOut.value;
 });
 
 // Синхронизация типа жилья и минмальных значений цены
