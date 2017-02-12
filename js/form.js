@@ -40,6 +40,7 @@ var setActive = function (pin) {
   activePin = pin;
   infoWindow.style.display = 'block';
   infoWindow.setAttribute('aria-hidden', 'false');
+  document.addEventListener('keydown', InfoWindowKeyDownHandler);
 };
 
 // Закрыть диалог
@@ -48,6 +49,13 @@ var closeInfoWindow = function (event) {
   infoWindow.style.display = 'none';
   infoWindow.setAttribute('aria-hidden', 'true');
   clearActive();
+  document.removeEventListener('keydown', InfoWindowKeyDownHandler);
+};
+
+var InfoWindowKeyDownHandler = function (event) {
+  if (isEscape(event)) {
+    closeInfoWindow(event);
+  }
 };
 
 // Нажали Enter?
@@ -78,6 +86,9 @@ var syncGuests = function () {
   formGuests.selectedIndex = (formRooms.value === '1') ? 1 : 0;
 };
 
+// Ожидание нажатия клавиши для закрытия окна
+document.addEventListener('keydown', InfoWindowKeyDownHandler);
+
 // Ожидание клика на пине
 map.addEventListener('click', function (event) {
   var pin = detectTargetPin(event);
@@ -102,13 +113,6 @@ closer.addEventListener('click', function (event) {
 // Ожидание нажатия Enter или Escape на закрытие
 closer.addEventListener('keydown', function (event) {
   if (isEnter(event) || isEscape(event)) {
-    closeInfoWindow(event);
-  }
-});
-
-// Ожидание нажатия Escape на закрытие
-infoWindow.addEventListener('keydown', function (event) {
-  if (isEscape(event)) {
     closeInfoWindow(event);
   }
 });
