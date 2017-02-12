@@ -40,7 +40,7 @@ var setActive = function (pin) {
   activePin = pin;
   infoWindow.style.display = 'block';
   infoWindow.setAttribute('aria-hidden', 'false');
-  document.addEventListener('keydown', InfoWindowKeyDownHandler);
+  document.addEventListener('keydown', infoWindowKeyDownHandler);
 };
 
 // Закрыть диалог
@@ -49,10 +49,10 @@ var closeInfoWindow = function (event) {
   infoWindow.style.display = 'none';
   infoWindow.setAttribute('aria-hidden', 'true');
   clearActive();
-  document.removeEventListener('keydown', InfoWindowKeyDownHandler);
+  document.removeEventListener('keydown', infoWindowKeyDownHandler);
 };
 
-var InfoWindowKeyDownHandler = function (event) {
+var infoWindowKeyDownHandler = function (event) {
   if (isEscape(event)) {
     closeInfoWindow(event);
   }
@@ -87,7 +87,7 @@ var syncGuests = function () {
 };
 
 // Ожидание нажатия клавиши для закрытия окна
-document.addEventListener('keydown', InfoWindowKeyDownHandler);
+document.addEventListener('keydown', infoWindowKeyDownHandler);
 
 // Ожидание клика на пине
 map.addEventListener('click', function (event) {
