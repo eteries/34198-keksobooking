@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.initializePins = function () {
 
 // Пины и диалог
   var map = document.querySelector('.tokyo__pin-map');
@@ -85,5 +85,4 @@
       closeInfoWindow(event);
     }
   });
-
-})();
+};

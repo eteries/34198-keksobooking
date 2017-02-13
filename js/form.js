@@ -64,3 +64,5 @@ formGuests.addEventListener('change', function () {
 formRooms.addEventListener('change', function () {
   syncGuests();
 });
+
+window.initializePins();
