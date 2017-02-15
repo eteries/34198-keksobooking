@@ -1,6 +1,5 @@
 'use strict';
 
-
 // Форма и её элементы
 var form = document.querySelector('.notice__form');
 var formTitle = form.querySelector('#title');
@@ -64,5 +63,3 @@ formGuests.addEventListener('change', function () {
 formRooms.addEventListener('change', function () {
   syncGuests();
 });
-
-window.initializePins();
