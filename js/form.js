@@ -1,6 +1,5 @@
 'use strict';
 
-
 // Форма и её элементы
 var form = document.querySelector('.notice__form');
 var formTitle = form.querySelector('#title');
@@ -35,34 +34,27 @@ formPrice.max = 1000000;
 
 formAddress.required = true;
 
-// Синхронизировать комнаты по гостям
-var syncRooms = window.synchronizeFields(formGuests, formRooms, ['3', '0'], ['2', '1'], 'value');
-// Синхронизировать гостей по комнатам
-var syncGuests = window.synchronizeFields(formRooms, formGuests, ['1', '2', '100'], ['0', '3', '3'], 'value');
-
 // Синхронизация времени въезда - выезда
 formCheckIn.addEventListener('change', function () {
-  window.synchronizeFields(formCheckIn, formCheckOut, ['12', '13', '14'], ['12', '13', '14'], 'value')();
+  window.synchronizeFields(formCheckIn, formCheckOut, ['12', '13', '14'], ['12', '13', '14'], 'value');
 });
 
 formCheckOut.addEventListener('change', function () {
-  window.synchronizeFields(formCheckOut, formCheckIn, ['12', '13', '14'], ['12', '13', '14'], 'value')();
+  window.synchronizeFields(formCheckOut, formCheckIn, ['12', '13', '14'], ['12', '13', '14'], 'value');
 });
 
 // Синхронизация типа жилья и минмальных значений цены
 formType.addEventListener('change', function () {
-  window.synchronizeFields(formType, formPrice, ['sm', 'md', 'lg'], ['0', '1000', '10000'], 'min')();
+  window.synchronizeFields(formType, formPrice, ['sm', 'md', 'lg'], ['0', '1000', '10000'], 'min');
 });
 
 // Синхронизация количества комнат и гостей
-syncRooms();
+window.synchronizeFields(formGuests, formRooms, ['3', '0'], ['2', '1'], 'value');
 
 formGuests.addEventListener('change', function () {
-  syncRooms();
+  window.synchronizeFields(formGuests, formRooms, ['3', '0'], ['2', '1'], 'value');
 });
 
 formRooms.addEventListener('change', function () {
-  syncGuests();
+  window.synchronizeFields(formRooms, formGuests, ['1', '2', '100'], ['0', '3', '3'], 'value');
 });
-
-window.initializePins();

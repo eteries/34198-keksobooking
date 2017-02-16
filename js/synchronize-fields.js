@@ -1,9 +1,8 @@
 'use strict';
 
-window.synchronizeFields = function (elementFrom, elementTo, arrayFrom, arrayTo, attr) {
-
-  return function () {
+window.synchronizeFields = (function () {
+  return function (elementFrom, elementTo, arrayFrom, arrayTo, attr) {
     var selectedIndex = arrayFrom.indexOf(elementFrom.value);
     elementTo[attr] = arrayTo[selectedIndex];
   };
-};
+})();
