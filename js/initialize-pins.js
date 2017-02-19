@@ -47,7 +47,7 @@
   // Ожидание Enter на пине
   map.addEventListener('keydown', function (event) {
     var pin = detectTargetPin(event);
-    if (pin && window.isEnter(event)) {
+    if (pin && window.utils.isEnter(event)) {
       setActive(pin);
       window.showCard(function () {
         activePin.focus();

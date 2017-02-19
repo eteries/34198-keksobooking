@@ -19,7 +19,7 @@ window.showCard = (function () {
 
   // Закрывать по Escape
   var infoWindowKeyDownHandler = function (event) {
-    if (window.isEscape(event)) {
+    if (window.utils.isEscape(event)) {
       closeInfoWindow(event);
     }
   };
@@ -31,12 +31,12 @@ window.showCard = (function () {
 
   // Ожидание нажатия Enter или Escape на закрытие
   closer.addEventListener('keydown', function (event) {
-    if (window.isEnter(event) || window.isEscape(event)) {
+    if (window.utils.isEnter(event) || window.utils.isEscape(event)) {
       closeInfoWindow(event);
     }
   });
 
-  // Возврат функции для выполнения действий при открытии и приёмва колбэка
+  // Возврат функции для выполнения действий при открытии и приёма колбэка
   return function (cb) {
     infoWindow.style.display = 'block';
     infoWindow.setAttribute('aria-hidden', 'false');
