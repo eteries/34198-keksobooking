@@ -42,8 +42,6 @@
     }
   };
 
-  // Показ окна с запуском ожидания Escape
-  window.showCard();
 
   // Ожидание клика на пине
   map.addEventListener('click', function (event) {
@@ -75,10 +73,12 @@
   // Сделать новый пин
   var renderPin = function (template, data, id) {
     var newElement = template.cloneNode(true);
+    var newElementImg = newElement.querySelector('img');
     map.appendChild(newElement);
     newElement.style.left = data.location.x + 'px';
     newElement.style.right = data.location.y + 'px';
     newElement.dataset.num = id;
+    newElementImg.src = data.author.avatar;
   };
 
   // Выбрать пины для отрисовки
@@ -94,6 +94,10 @@
   window.load('https://intensive-javascript-server-pedmyactpq.now.sh/keksobooking/data', function (data) {
     similarApartments = data;
     selectPins();
+    // Заполнение стартовой карточки актуальными данными
+    window.fillCard(similarApartments[0]);
+    // Показ стартового окна с запуском ожидания Escape
+    window.showCard();
   });
 
 })();
