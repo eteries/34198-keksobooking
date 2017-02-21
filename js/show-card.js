@@ -24,6 +24,45 @@ window.showCard = (function () {
     }
   };
 
+  // Заполнить карточку соотвествующими данными
+  window.fillCard = function (data) {
+    infoWindow.querySelector('.lodge__title').innerText = data.offer.title;
+    infoWindow.querySelector('.lodge__address').innerText = data.offer.address;
+    infoWindow.querySelector('.lodge__price').innerText = data.offer.price + '₽/ночь';
+    infoWindow.querySelector('.lodge__description').innerText = data.offer.description;
+    infoWindow.querySelector('.dialog__title img').src = data.author.avatar;
+
+    var roomWord = window.utils.declineWords(data.offer.rooms, 'комната', 'комнаты', 'комнат');
+    var guestWord = window.utils.declineWords(data.offer.guests, 'гостя', 'гостей', 'гостей');
+    if (data.offer.guests > 0) {
+      infoWindow.querySelector('.lodge__rooms-and-guests').innerText = data.offer.rooms + ' ' + roomWord + ' для ' + data.offer.guests + ' ' + guestWord;
+    } else {
+      infoWindow.querySelector('.lodge__rooms-and-guests').innerText = 'Не для гостей';
+    }
+
+    if (data.offer.type === 'flat') {
+      infoWindow.querySelector('.lodge__type').innerText = 'Квартира';
+    } else if (data.offer.type === 'bungalo') {
+      infoWindow.querySelector('.lodge__type').innerText = 'Лачуга';
+    } else if (data.offer.type === 'house') {
+      infoWindow.querySelector('.lodge__type').innerText = 'Дворец';
+    }
+
+    infoWindow.querySelector('.lodge__checkin-time').innerText = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+
+    var featuresList = '';
+    data.offer.features.forEach(function (feature) {
+      featuresList += '<span class="feature__image  feature__image--' + feature + '"></span>';
+    });
+    infoWindow.querySelector('.lodge__features').innerHTML = featuresList;
+
+    var imagesList = '';
+    data.offer.photos.forEach(function (image, index) {
+      imagesList += '<img src="' + image + '" alt="Фото ' + index + '" width="52" height="42"> ';
+    });
+    infoWindow.querySelector('.lodge__photos').innerHTML = imagesList;
+  };
+
   // Ожидание клика на закрытие
   closer.addEventListener('click', function (event) {
     closeInfoWindow(event);
