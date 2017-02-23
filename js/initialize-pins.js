@@ -8,14 +8,14 @@
 
   //  Активировать пин
   var setActive = function (pin) {
-    clearActive(activePin);
+    cleanActive();
     pin.classList.add('pin--active');
     pin.setAttribute('aria-pressed', 'true');
     activePin = pin;
   };
 
   // Деактивировать текущий активный пин
-  var clearActive = function () {
+  var cleanActive = function () {
     if (activePin) {
       activePin.classList.remove('pin--active');
       activePin.setAttribute('aria-pressed', 'false');
@@ -40,13 +40,16 @@
 
     newElement.addEventListener('click', function (event) {
       setActive(event.currentTarget);
-      window.showCard(data);
+      window.showCard(data, function () {
+        cleanActive();
+      });
     });
 
     newElement.addEventListener('keydown', function (event) {
       if (window.utils.isEnter(event)) {
         window.showCard(data, function () {
           activePin.focus();
+          cleanActive();
         });
         setActive(event.currentTarget);
       }
@@ -57,7 +60,7 @@
   var selectPins = function (array, number) {
     array.forEach(function (apartment, index) {
       if (index < number) {
-        renderPin(templatePin, apartment, index);
+        renderPin(templatePin, apartment);
       }
     });
   };

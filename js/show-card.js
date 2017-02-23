@@ -34,11 +34,12 @@ window.showCard = (function () {
 
     var roomWord = window.utils.declineWords(data.offer.rooms, 'комната', 'комнаты', 'комнат');
     var guestWord = window.utils.declineWords(data.offer.guests, 'гостя', 'гостей', 'гостей');
+    var text = 'Не для гостей';
     if (data.offer.guests > 0) {
-      infoWindow.querySelector('.lodge__rooms-and-guests').innerText = data.offer.rooms + ' ' + roomWord + ' для ' + data.offer.guests + ' ' + guestWord;
-    } else {
-      infoWindow.querySelector('.lodge__rooms-and-guests').innerText = 'Не для гостей';
+      text = data.offer.rooms + ' ' + roomWord + ' для ' +
+        data.offer.guests + ' ' + guestWord;
     }
+    infoWindow.querySelector('.lodge__rooms-and-guests').innerText = text;
 
     if (data.offer.type === 'flat') {
       infoWindow.querySelector('.lodge__type').innerText = 'Квартира';
@@ -46,6 +47,17 @@ window.showCard = (function () {
       infoWindow.querySelector('.lodge__type').innerText = 'Лачуга';
     } else if (data.offer.type === 'house') {
       infoWindow.querySelector('.lodge__type').innerText = 'Дворец';
+    }
+
+    switch (data.offer.type) {
+      case 'flat':
+        infoWindow.querySelector('.lodge__type').innerText = 'Квартира';
+        break;
+      case 'bungalo':
+        infoWindow.querySelector('.lodge__type').innerText = 'Лачуга';
+        break;
+      case 'house':
+        infoWindow.querySelector('.lodge__type').innerText = 'Дворец';
     }
 
     infoWindow.querySelector('.lodge__checkin-time').innerText = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
