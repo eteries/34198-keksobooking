@@ -41,24 +41,17 @@ window.showCard = (function () {
     }
     infoWindow.querySelector('.lodge__rooms-and-guests').innerText = text;
 
-    if (data.offer.type === 'flat') {
-      infoWindow.querySelector('.lodge__type').innerText = 'Квартира';
-    } else if (data.offer.type === 'bungalo') {
-      infoWindow.querySelector('.lodge__type').innerText = 'Лачуга';
-    } else if (data.offer.type === 'house') {
-      infoWindow.querySelector('.lodge__type').innerText = 'Дворец';
-    }
-
     switch (data.offer.type) {
       case 'flat':
-        infoWindow.querySelector('.lodge__type').innerText = 'Квартира';
+        text = 'Квартира';
         break;
       case 'bungalo':
-        infoWindow.querySelector('.lodge__type').innerText = 'Лачуга';
+        text = 'Лачуга';
         break;
       case 'house':
-        infoWindow.querySelector('.lodge__type').innerText = 'Дворец';
+        text = 'Дворец';
     }
+    infoWindow.querySelector('.lodge__type').innerText = text;
 
     infoWindow.querySelector('.lodge__checkin-time').innerText = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
 
