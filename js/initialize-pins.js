@@ -6,53 +6,69 @@
   var map = document.querySelector('.tokyo__pin-map');
   var activePin = document.querySelector('.pin--active');
 
-  var detectTargetPin = function (event) {
-    var target = event.target;
-
-    while (target !== map) {
-      if (target.classList.contains('pin')) {
-        return target;
-      }
-      target = target.parentNode;
-    }
-
-    return false;
-  };
-
   //  Активировать пин
   var setActive = function (pin) {
-    clearActive(activePin);
+    cleanActive();
     pin.classList.add('pin--active');
     pin.setAttribute('aria-pressed', 'true');
     activePin = pin;
   };
 
   // Деактивировать текущий активный пин
-  var clearActive = function () {
+  var cleanActive = function () {
     if (activePin) {
       activePin.classList.remove('pin--active');
       activePin.setAttribute('aria-pressed', 'false');
     }
   };
 
-  // Ожидание клика на пине
-  map.addEventListener('click', function (event) {
-    var pin = detectTargetPin(event);
-    if (pin) {
-      setActive(pin);
-      window.showCard();
-    }
-  });
+  // Для скачивания объявлений
+  var similarApartments = [];
+  var templateElement = document.querySelector('#pin-template');
+  var templatePin = templateElement.content.querySelector('.pin');
 
-  // Ожидание Enter на пине
-  map.addEventListener('keydown', function (event) {
-    var pin = detectTargetPin(event);
-    if (pin && window.isEnter(event)) {
-      setActive(pin);
-      window.showCard(function () {
-        activePin.focus();
+  // Сделать новый пин
+  var renderPin = function (template, data) {
+    var newElement = template.cloneNode(true);
+    var newElementImg = newElement.querySelector('img');
+
+    newElement.style.left = data.location.x + 'px';
+    newElement.style.right = data.location.y + 'px';
+    newElementImg.src = data.author.avatar;
+
+    map.appendChild(newElement);
+
+    newElement.addEventListener('click', function (event) {
+      setActive(event.currentTarget);
+      window.showCard(data, function () {
+        cleanActive();
       });
-    }
+    });
+
+    newElement.addEventListener('keydown', function (event) {
+      if (window.utils.isEnter(event)) {
+        window.showCard(data, function () {
+          activePin.focus();
+          cleanActive();
+        });
+        setActive(event.currentTarget);
+      }
+    });
+  };
+
+  // Выбрать пины для отрисовки
+  var selectPins = function (array, number) {
+    array.forEach(function (apartment, index) {
+      if (index < number) {
+        renderPin(templatePin, apartment);
+      }
+    });
+  };
+
+  // Загрузка и отбор данных
+  window.load('https://intensive-javascript-server-pedmyactpq.now.sh/keksobooking/data', function (data) {
+    similarApartments = data;
+    selectPins(similarApartments, 3);
   });
 
 })();

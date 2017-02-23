@@ -67,11 +67,8 @@
     </div>
     <div class="tokyo__pin-map">
       <div class="pin  pin__main" tabindex="1" role="button" aria-pressed="false"><img src="img/main-pin-image.png" alt="Main Pin" class="rounded" width="40" height="44"></div>
-      <div class="pin  pin--active" style="left: 700px;top: 350px" tabindex="1" role="button" aria-pressed="true"><img src="img/avatars/avatar.png" alt="User Avatar" class="rounded" width="40" height="40"></div>
-      <div class="pin" style="left: 400px;top: 400px" tabindex="1" role="button" aria-pressed="false"><img src="img/avatars/simpson.png" alt="User Avatar" class="rounded" width="40" height="40"></div>
-      <div class="pin" tabindex="1" role="button" aria-pressed="false"><img src="img/avatars/default.png" alt="User Avatar" class="rounded" width="40" height="40"></div>
     </div>
-    <div class="dialog" role="dialog">
+    <div class="dialog" style="display: none" role="dialog" aria-hidden="true">
       <div class="dialog__title"><img src="img/avatars/avatar.png" alt="Avatar" width="70" height="70">
         <a href="#" class="dialog__close" tabindex="1" role="button"><img src="img/close.svg" alt="close" width="22" height="22"></a>
       </div>
@@ -256,9 +253,17 @@
   </div>
 </footer>
 
+<template id="pin-template">
+  <div class="pin" tabindex="1" role="button" aria-pressed="false">
+    <img src="" alt="" class="rounded" width="40" height="40">
+  </div>
+</template>
+
 <script src="js/synchronize-fields.js"></script>
+<script src="js/utils.js"></script>
 <script src="js/form.js"></script>
 <script src="js/show-card.js"></script>
+<script src="js/load.js"></script>
 <script src="js/initialize-pins.js"></script>
 
 </body>
