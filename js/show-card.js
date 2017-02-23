@@ -25,7 +25,7 @@ window.showCard = (function () {
   };
 
   // Заполнить карточку соотвествующими данными
-  window.fillCard = function (data) {
+  var fillCard = function (data) {
     infoWindow.querySelector('.lodge__title').innerText = data.offer.title;
     infoWindow.querySelector('.lodge__address').innerText = data.offer.address;
     infoWindow.querySelector('.lodge__price').innerText = data.offer.price + '₽/ночь';
@@ -76,7 +76,8 @@ window.showCard = (function () {
   });
 
   // Возврат функции для выполнения действий при открытии и приёма колбэка
-  return function (cb) {
+  return function (data, cb) {
+    fillCard(data);
     infoWindow.style.display = 'block';
     infoWindow.setAttribute('aria-hidden', 'false');
     document.addEventListener('keydown', infoWindowKeyDownHandler);
