@@ -52,11 +52,11 @@
     var newElement = template.cloneNode(true);
     var newElementImg = newElement.querySelector('img');
 
-    newElement.style.left = data.location.x + 'px';
-    newElement.style.right = data.location.y + 'px';
-    newElementImg.src = data.author.avatar;
-
     map.appendChild(newElement);
+
+    newElement.style.left = data.location.x - newElement.offsetWidth / 2 + 'px';
+    newElement.style.top = data.location.y - newElement.offsetHeight + 'px';
+    newElementImg.src = data.author.avatar;
 
     window._pinClickHandler = function (event) {
       setActive(event.currentTarget);
@@ -119,11 +119,7 @@
     if (currentFilters.type && currentFilters.type !== 'any') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['type'] === currentFilters.type) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['type'] === currentFilters.type;
           });
     }
 
@@ -131,11 +127,7 @@
     if (currentFilters.price && currentFilters.price === 'low') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['price'] < 10000) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['price'] < 10000;
           });
     }
 
@@ -143,11 +135,7 @@
     if (currentFilters.price && currentFilters.price === 'middle') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['price'] >= 10000 && apartment['offer']['price'] <= 50000) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['price'] >= 10000 && apartment['offer']['price'] <= 50000;
           });
     }
 
@@ -155,11 +143,7 @@
     if (currentFilters.price && currentFilters.price === 'hight') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['price'] > 50000) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['price'] > 50000;
           });
     }
 
@@ -167,11 +151,7 @@
     if (currentFilters.rooms && currentFilters.rooms !== 'any') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['rooms'].toString() === currentFilters.rooms) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['rooms'].toString() === currentFilters.rooms;
           });
     }
 
@@ -179,11 +159,7 @@
     if (currentFilters.guests && currentFilters.guests !== 'any') {
       filtered = filtered.filter(
           function (apartment) {
-            if (apartment['offer']['guests'].toString() === currentFilters.guests) {
-              return true;
-            } else {
-              return false;
-            }
+            return apartment['offer']['guests'].toString() === currentFilters.guests;
           });
     }
 
@@ -193,11 +169,7 @@
       if (currentFeatures.hasOwnProperty(feature) && currentFeatures[feature]) {
         filtered = filtered.filter(
             function (apartment) {
-              if (apartment['offer']['features'].indexOf(feature) !== -1) {
-                return true;
-              } else {
-                return false;
-              }
+              return apartment['offer']['features'].indexOf(feature) !== -1;
             });
       }
     }
@@ -241,7 +213,6 @@
       selectPins(applyFilters());
     });
   });
-
 
   // Сброс фильтров пр перезагрузке
   window.addEventListener('load', function () {
