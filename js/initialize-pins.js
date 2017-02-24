@@ -35,8 +35,6 @@
     var pins = map.querySelectorAll('.pin');
     [].forEach.call(pins, function (item) {
       if (item.className !== 'pin.pin--main') {
-        item.removeEventListener('click', window._pinClickHandler);
-        item.removeEventListener('keydown', window._pinEnterHandler);
         map.removeChild(item);
       }
     });
@@ -58,14 +56,14 @@
     newElement.style.top = data.location.y - newElement.offsetHeight + 'px';
     newElementImg.src = data.author.avatar;
 
-    window._pinClickHandler = function (event) {
+    newElement.addEventListener('click', function (event) {
       setActive(event.currentTarget);
       window.showCard(data, function () {
         cleanActive();
       });
-    };
+    });
 
-    window._pinEnterHandler = function (event) {
+    newElement.addEventListener('keydown', function (event) {
       if (window.utils.isEnter(event)) {
         window.showCard(data, function () {
           activePin.focus();
@@ -73,10 +71,7 @@
         });
         setActive(event.currentTarget);
       }
-    };
-
-    newElement.addEventListener('click', window._pinClickHandler);
-    newElement.addEventListener('keydown', window._pinEnterHandler);
+    });
   };
 
   // Выбрать пины для отрисовки
