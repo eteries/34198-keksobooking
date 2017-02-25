@@ -36,7 +36,7 @@
     pins.forEach(function (item) {
       map.removeChild(item);
     });
-    pins.length = 0;
+    pins = [];
   };
 
   // Для скачивания объявлений
