@@ -2,7 +2,10 @@
 
 window.utils = (function () {
 
-  var keys = {ENTER: 13, ESCAPE: 27};
+  var keys = {
+    ENTER: 13,
+    ESCAPE: 27
+  };
 
   var declineWords = function (number, case1, case2, case5) {
     number %= 100;
