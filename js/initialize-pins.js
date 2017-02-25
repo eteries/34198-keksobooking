@@ -4,6 +4,7 @@
 
   // Пины и диалог
   var map = document.querySelector('.tokyo__pin-map');
+  var pins = [];
   var activePin = document.querySelector('.pin--active');
 
   // Фильтры
@@ -14,7 +15,7 @@
   var guestsNumberFilter = filterControls.querySelector('#housing_guests-number');
   var housingFeaturesFilters = filterControls.querySelectorAll('#housing_features input');
 
-  //  Активировать пин
+  // Активировать пин
   var setActive = function (pin) {
     cleanActive();
     pin.classList.add('pin--active');
@@ -32,12 +33,10 @@
 
   // Очистить карту
   var cleanMap = function () {
-    var pins = map.querySelectorAll('.pin');
-    [].forEach.call(pins, function (item) {
-      if (item.className !== 'pin.pin--main') {
-        map.removeChild(item);
-      }
+    pins.forEach(function (item) {
+      map.removeChild(item);
     });
+    pins.length = 0;
   };
 
   // Для скачивания объявлений
@@ -50,6 +49,7 @@
     var newElement = template.cloneNode(true);
     var newElementImg = newElement.querySelector('img');
 
+    pins.push(newElement);
     map.appendChild(newElement);
 
     newElement.style.left = data.location.x - newElement.offsetWidth / 2 + 'px';
@@ -90,12 +90,26 @@
     selectPins(similarApartments, 3);
   });
 
+  // Возможные значения, приходящие из формы фильтров
+  var filterValues = {
+    ANY: 'any',
+    LOW: 'low',
+    MIDDLE: 'middle',
+    HIGH: 'hight'
+  };
+
+  // Цифровые значения цен
+  var price = {
+    LOW: 10000,
+    HIGH: 50000
+  };
+
   // Изменяемый список условий для фильтрации
   var currentFilters = {
-    type: 'any',
-    price: '',
-    rooms: 'any',
-    guests: 'any',
+    type: filterValues.ANY,
+    price: filterValues.MIDDLE,
+    rooms: filterValues.ANY,
+    guests: filterValues.ANY,
     features: {
       wifi: '',
       dishwasher: '',
@@ -111,61 +125,51 @@
     var filtered = similarApartments;
 
     // По типу
-    if (currentFilters.type && currentFilters.type !== 'any') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['type'] === currentFilters.type;
-          });
+    if (currentFilters.type && currentFilters.type !== filterValues.ANY) {
+      filtered = filtered.filter(function (apartment) {
+        return apartment['offer']['type'] === currentFilters.type;
+      });
     }
 
-    // В низшем диапазоне цен
-    if (currentFilters.price && currentFilters.price === 'low') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['price'] < 10000;
-          });
-    }
-
-    // В среднем диапазоне цен
-    if (currentFilters.price && currentFilters.price === 'middle') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['price'] >= 10000 && apartment['offer']['price'] <= 50000;
-          });
-    }
-
-    // В высшем диапазоне цен
-    if (currentFilters.price && currentFilters.price === 'hight') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['price'] > 50000;
-          });
+    // По цене
+    switch (currentFilters.price) {
+      case filterValues.LOW:
+        filtered = filtered.filter(function (apartment) {
+          return apartment['offer']['price'] < price.LOW;
+        });
+        break;
+      case filterValues.MIDDLE:
+        filtered = filtered.filter(function (apartment) {
+          return apartment['offer']['price'] >= price.LOW && apartment['offer']['price'] <= price.HIGH;
+        });
+        break;
+      case filterValues.HIGH:
+        filtered = filtered.filter(function (apartment) {
+          return apartment['offer']['price'] > price.HIGH;
+        });
     }
 
     // По числу комнат
-    if (currentFilters.rooms && currentFilters.rooms !== 'any') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['rooms'].toString() === currentFilters.rooms;
-          });
+    if (currentFilters.rooms && currentFilters.rooms !== filterValues.ANY) {
+      filtered = filtered.filter(function (apartment) {
+        return apartment['offer']['rooms'].toString() === currentFilters.rooms;
+      });
     }
 
     // По числу гостей
-    if (currentFilters.guests && currentFilters.guests !== 'any') {
-      filtered = filtered.filter(
-          function (apartment) {
-            return apartment['offer']['guests'].toString() === currentFilters.guests;
-          });
+    if (currentFilters.guests && currentFilters.guests !== filterValues.ANY) {
+      filtered = filtered.filter(function (apartment) {
+        return apartment['offer']['guests'].toString() === currentFilters.guests;
+      });
     }
 
-    // В соответстии с набором удобств
+    // В соответствии с набором удобств
     var currentFeatures = currentFilters.features;
     for (var feature in currentFeatures) {
       if (currentFeatures.hasOwnProperty(feature) && currentFeatures[feature]) {
-        filtered = filtered.filter(
-            function (apartment) {
-              return apartment['offer']['features'].indexOf(feature) !== -1;
-            });
+        filtered = filtered.filter(function (apartment) {
+          return apartment['offer']['features'].indexOf(feature) !== -1;
+        });
       }
     }
 
@@ -209,7 +213,7 @@
     });
   });
 
-  // Сброс фильтров пр перезагрузке
+  // Сброс фильтров при перезагрузке
   window.addEventListener('load', function () {
     filterControls.reset();
   });

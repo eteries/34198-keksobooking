@@ -11,14 +11,14 @@ window.showCard = (function () {
     event.preventDefault();
     infoWindow.style.display = 'none';
     infoWindow.setAttribute('aria-hidden', 'true');
-    document.removeEventListener('keydown', infoWindowKeyDownHandler);
+    document.removeEventListener('keydown', documentKeyDownHandler);
     if (typeof onClose === 'function') {
       onClose();
     }
   };
 
   // Закрывать по Escape
-  var infoWindowKeyDownHandler = function (event) {
+  var documentKeyDownHandler = function (event) {
     if (window.utils.isEscape(event)) {
       closeInfoWindow(event);
     }
@@ -41,14 +41,21 @@ window.showCard = (function () {
     }
     infoWindow.querySelector('.lodge__rooms-and-guests').innerText = text;
 
+    // Типы жилья
+    var types = {
+      FLAT: 'flat',
+      BUNGALO: 'bungalo',
+      HOUSE: 'house'
+    };
+
     switch (data.offer.type) {
-      case 'flat':
+      case types.FLAT:
         text = 'Квартира';
         break;
-      case 'bungalo':
+      case types.BUNGALO:
         text = 'Лачуга';
         break;
-      case 'house':
+      case types.HOUSE:
         text = 'Дворец';
     }
     infoWindow.querySelector('.lodge__type').innerText = text;
@@ -85,7 +92,7 @@ window.showCard = (function () {
     fillCard(data);
     infoWindow.style.display = 'block';
     infoWindow.setAttribute('aria-hidden', 'false');
-    document.addEventListener('keydown', infoWindowKeyDownHandler);
+    document.addEventListener('keydown', documentKeyDownHandler);
     onClose = cb;
   };
 
