@@ -85,7 +85,7 @@
   };
 
   // Загрузка и отбор данных
-  window.load('https://intensive-javascript-server-pedmyactpq.now.sh/keksobooking/data', function (data) {
+  window.load('https://js.dump.academy/keksobooking/data', function (data) {
     similarApartments = data;
     selectPins(similarApartments, 3);
   });
